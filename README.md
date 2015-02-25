@@ -1,3 +1,12 @@
+This fork includes a hack which is a workaround for the following bug: https://issues.jenkins-ci.org/browse/JENKINS-26990
+
+Basically, this plugin at some point converts text parameters to string parameters and because I couldn't find the exact spot, I just added some code which checks if a string parameter contains a newline and if so, converts it to a text parameter (newlines are lost in normal string parameters).
+
+This hack can be found on the branch 'hack', which is based on the tag 'project-inheritance-1.5.3'.
+
+ORIGINAL README
+===============
+
 This project contains the source code of the "Inheritance Plugin" for
 Jenkins.
 
