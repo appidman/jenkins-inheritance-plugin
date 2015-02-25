@@ -28,6 +28,8 @@ import hudson.model.Cause;
 import hudson.model.CauseAction;
 import hudson.model.Job;
 import hudson.model.ParameterDefinition;
+import hudson.model.TextParameterDefinition;
+import hudson.model.StringParameterDefinition;
 import hudson.model.ParametersAction;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.model.StringParameterValue;
@@ -209,7 +211,17 @@ public class InheritanceParametersDefinitionProperty extends
 				}
 		);
 		for (ParameterDefinition pd : in) {
-			tree.add(pd.copyWithDefaultValue(pd.getDefaultParameterValue()));
+		    /* * * * * * * * * * * * * * * * * HACK  * * * * * * * * * * * * * * * * * * * * * *
+		     * check if string param contains newline and if so create TextParameterDefinition *
+		     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		    if (pd instanceof StringParameterDefinition) {
+    		    String value = ((StringParameterDefinition) pd).getDefaultParameterValue().value;
+    		    if (value.contains("\n")) {
+    		        tree.add(new TextParameterDefinition(pd.getName(), value, pd.getDescription()));
+    		        continue;
+    		    }
+		    }
+		    tree.add(pd.copyWithDefaultValue(pd.getDefaultParameterValue()));
 		}
 		return new LinkedList<ParameterDefinition>(tree);
 	}
